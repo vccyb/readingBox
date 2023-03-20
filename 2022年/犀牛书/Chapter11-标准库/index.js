@@ -20,4 +20,9 @@
 
 // reg
 
-let pattern = /s$/i
+// let pattern = /s$/i
+
+
+
+
+
