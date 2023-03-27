@@ -367,7 +367,371 @@ Object.assign({}, defaults, o) // 新建一个对象，默认复制到对象中�
 
 # 7 数组
 
+## 1、sort
+
+大家很多时候，sort用的还是有点少
+
+```js
+a.sort((a,b) => a-b) // 升序
+a.sort((a,b) => b-a) // 降序
+
+// 当然这是对数字来说
+
+// 核心，返回  正负值
+// < 0 参数1 应该在参数2 的前面
+// > 0 参数1 应该在参数2的后面
+```
 
 
 
+## 2、判断数组
+
+```js
+Array.isArray([]) // true
+```
+
+
+
+## 3、遍历数组
+
+最好使用for of
+
+
+
+# 8 函数
+
+## 1、箭头函数
+
+```js
+const sum = (x, y) => x + y
+```
+
+注意，箭头函数他们没有prototype属性，这意味着箭头函数不能作为构造函数
+
+**箭头函数，他的this少从定义他的环境继承this的。**
+
+
+
+## 2、函数调用
+
+调用的几种方式
+
+作为函数调用
+
+方法
+
+构造函数
+
+call、apply
+
+隐式调用
+
+
+
+# 9 类
+
+类的使用 略
+
+# 10 模块
+
+## 1、再导出
+
+```js
+export {mean as default} from 'xxx'
+```
+
+## 2、动态导入
+
+```js
+import("xxx").then((stats) => {
+  let average = stats.mean(data)
+})
+```
+
+# 11 标准库
+
+## 1、weakSet和weakMap
+
+注意weak类型的，key要说对象类型
+
+## 2、正则
+
+正则的学问很深
+
+这个可以试试chatgpt
+
+## 3、URL API
+
+这里注意url有个searchParams
+
+```js
+let url = new URL("https://example.com/search")
+url.search // => ""
+url.searchParams.append("q", "term")
+url.search // => "?q=term"
+url.searchParams.set("q", "x")
+url.searchParams.get("q") // => x
+
+[...url.searchParams]
+```
+
+
+
+
+
+12 13 14 章略过，重点是异步和promise。还有反射、proxy可以看下
+
+# 12 迭代器 生成器
+
+for of 和 ... ，
+
+
+
+## 1、迭代器概念
+
+迭代器对象是指任何具有next方法，切该方法返回迭代结果对象，迭代结果对象是具备value和done的对象。
+
+要迭代一个可迭代对象，搜寻调用方法获得一个迭代器对象，然后执行next，知道返回done=true
+
+```js
+let list = [1,2,3,4,5]
+let iter = list[Symbol,iterator]()
+
+let head = list.next().value
+let tail = [...iter] // tail = [2,3,4,5]
+```
+
+
+
+## 2、实现可迭代对象
+
+```js
+class xxx {
+  [Symbol.iterator]() {
+    ///
+    return {
+      ...
+      next() {
+       // xxx.  return {value:xxxx} || {done: true}
+    }
+    }
+  }
+}
+```
+
+## 3、生成器
+
+```js
+function* fn() {
+  yield 2;
+  yield 3;
+  yield 5;
+  yield 7;
+}
+
+let primes = fn();
+
+primes.next().value // 2
+primes.next().value // 3
+primes.next().value // 5
+primes.next().value // 7
+primes.next().done // true
+
+[...fn()]
+
+for(let x of fn()) {
+  ...
+}
+```
+
+利用生成器的代码有点难以理解，建议async await
+
+
+
+# 13 异步
+
+异步主要就是promise async await这几个点
+
+## 1、期约链
+
+```js
+fetch("/api/user/profile")
+.then(response => {
+  return response.json()
+})
+.then(profile => {
+  ....
+})
+
+fetch().then().then()
+```
+
+## 2、串行期约
+
+```js
+function fetchSequentially(urls) {
+  const bodies = [];
+  
+  function fetchOne(url) {
+    return fetch(url)
+    	.then(response => response.text())
+    	.then(body => {
+      	bodies.push(body)
+    })
+  }
+  
+  
+  let p = Promise.resolve(undefined);
+  
+  for(url of urls) {
+    p = p.then(() => fetchOne(url))
+  }
+  
+  return p.then(() => bodies)
+}
+```
+
+## 3、async await
+
+ES2017新增的关键字，极大简化了期约的使用
+
+```js
+let response = await fetch("/api/user/profile")
+let profile = await response.json()
+```
+
+```js
+async function fn() {
+  let response = await fetch("/api/user/profile");
+  let profile = await respnose.json();
+  return profile.xxx
+}
+```
+
+## 4、等待多个期约
+
+```js
+let [v1, v2] = await Promise.all([getJSON(url1), getJSON(url2)])
+```
+
+## 5、异步迭代
+
+```js
+for await(const response of promise) {
+  handle(response)
+}
+```
+
+# 14 元编程
+
+## 1、属性的特性
+
+JS的属性有名字和值，但每个属性也有3个关联的特性，用于指定属性的行为以及你可以对它执行什么操作
+
+如果加上value和访问器，我们说书一个属性有一个名字和4个特性
+
+```
+// 数据属性
+value
+writable   // 是否可以修改属性的值
+enumerable  // for in 或者 Object.keys()
+configurable //删除属性、是否可以修改属性
+
+// 访问器属性
+get
+set
+enumerable
+configurable
+```
+
+ 如何去获取对象的某个属性的属性描述符呢？
+
+```js
+Object.getOwnPropertyDescriptor({x: 1}, "x") //
+// 返回 {value:1, writable:true, enumerable:true, configrable: true}
+```
+
+如何设置呢？
+
+```js
+Object.defineProperty(o, "x", {writable: false})
+```
+
+## 2、对象的可扩展能力
+
+首先：对象的可扩展能力是控制是否可以给对象添加新的属性
+
+```js
+Object.isExtensible() // 判断是否可扩展
+
+Object.preventExtensions() // 阻止扩展。注意 是不可逆的，切只影响对象本身
+```
+
+Objec.seal() 和 Object.freeze()
+
+```js
+Object.seal() // 封存 
+
+Objec.freeze() // 冻结 所有的只有属性变成只读，不可扩展，不可配置
+```
+
+## 3、prototype特性
+
+```js
+Object.getPrototypeOf({})  // Object.prototype
+```
+
+
+
+## 4、反射 Reflect
+
+反射不是类，它的属性是定义了一组相关函数，可以模拟核心语言语法的行为
+
+```js
+Reflect.apply(f, o, args) //将函数f作为o的方法调用，如果o是null，则没有this值
+
+Reflect.construct(c, args, newTarget) 
+//
+.... 好多
+```
+
+## 5、代理
+
+```js
+let proxy = new Proxy(target, handlers)
+```
+
+可撤销的代理
+
+```js
+let {proxy, revoke} = Proxy.revocable(target, {})
+
+revoke() // 取消代理
+```
+
+代理和反射都很复杂，需要单独的去看
+
+
+
+# 15 浏览器中的js
+
+## 1、模块
+
+如果你使用的是 import 和 export这种，那么必须需要一个带有`type="module"`的script标签来加载
+
+## 2、async defer
+
+script标签上，defer和async都会明确的告诉浏览器，下载脚本的同时进行继续解析和渲染文档。（没有document。wirte）
+
+而defer会让浏览器把脚本的执行推迟到文档完全加载和解析之后，而async则让浏览器经早运行脚本。
+
+defer会有顺序的
+
+如果都存在，按照async
+
+## 3、网络请求 fetch
+
+实际上还是用的axios用的多，这个单独看看
+
+## 4、服务端发送事件
 
