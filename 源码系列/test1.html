@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const vnode = {
+        tag: "div",
+        props: {
+          onClick: () => alert("hello"),
+        },
+        children: "click me",
+      };
+
+      function renderer(vnode, container) {
+        // vnode.tag => 创建dom元素
+        const el = document.createElement(vnode.tag);
+        // 遍历vnode.props 添加到dom上
+        for (const key in vnode.props) {
+          if (/^on/.test(key)) {
+            el.addEventListener(key.substr(2).toLowerCase(), vnode.props[key]);
+          }
+        }
+
+        if (typeof vnode.children === "string") {
+          el.appendChild(document.createTextNode(vnode.children));
+        } else if (Array.isArray(vnode.children)) {
+          vnode.children.forEach((child) => renderer(child, el));
+        }
+
+        // 将元素挂载
+        container.appendChild(el);
+      }
+
+      renderer(vnode, document.body);
+    </script>
+  </body>
+</html>
