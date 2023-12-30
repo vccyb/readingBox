@@ -1,0 +1,11 @@
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  setup() {
+    const list = [1, 2, 3];
+    return () =>
+      list.map((v) => {
+        return <div>{v}</div>;
+      });
+  },
+});
