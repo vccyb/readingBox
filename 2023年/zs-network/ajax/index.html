@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <button id="send">sendAjax</button>
+      <div>进度条：<span id="progress"></span></div>
+      <button id="stop">stop</button>
+      <input type="file" name="" id="file" />
+    </div>
+
+    <script>
+      const btn = document.getElementById("send");
+      const stop = document.getElementById("stop");
+      const file = document.getElementById("file");
+
+      file.addEventListener("change", () => {
+        const formData = new FormData();
+        // 这个key
+        formData.append("file", file.files[0]);
+        const xhr = new XMLHttpRequest();
+        xhr.open("post", "http://localhost:3000/api/upload", true);
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log(xhr.responseText);
+          }
+        };
+        xhr.send(formData);
+      });
+
+      const sendAjax = () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("post", "http://localhost:3000/api/post", true);
+        // xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        // xhr.timeout = 10 ;
+        // xhr.addEventListener("timeout", () => {
+        //   console.log("请求超时了！！！！");
+        // });
+
+        xhr.addEventListener("progress", (event) => {
+          const progress = document.getElementById("progress");
+          progress.innerText = `${
+            (event.loaded / event.total).toFixed(2) * 100
+          }%`;
+          console.log(event.loaded, event.total);
+        });
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log(xhr.responseText);
+          }
+        };
+
+        xhr.addEventListener("abort", () => {
+          console.log("请求abort了");
+        });
+
+        stop.addEventListener("click", () => {
+          xhr.abort();
+        });
+
+        // xhr.send(JSON.stringify({ name: "cyb" }));
+        xhr.send("name=cyb&age=18");
+      };
+
+      btn.addEventListener("click", () => {
+        sendAjax();
+      });
+    </script>
+  </body>
+</html>
