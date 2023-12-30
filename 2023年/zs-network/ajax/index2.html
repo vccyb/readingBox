@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <button id="send">sendFetch</button>
+      <div>进度条：<span id="progress"></span></div>
+      <button id="stop">stop</button>
+      <input type="file" name="" id="file" />
+    </div>
+
+    <script>
+      const btn = document.getElementById("send");
+      const abort = new AbortController();
+      const sendFetch = () => {
+        fetch("http://localhost:3000/api/txt", {
+          signal: abort.signal,
+        })
+          .then(async (res) => {
+            const response = res.clone();
+            const reader = res.body.getReader();
+            const total = res.headers.get("content-length") || 0;
+            let loaded = 0;
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) {
+                break;
+              }
+              loaded += value.length;
+
+              console.log(`Received ${loaded} of ${total}`);
+              const progress = document.getElementById("progress");
+              progress.innerText = `${(loaded / total).toFixed(2) * 100}%`;
+            }
+
+            return response.text();
+          })
+          .then((data) => {
+            console.log(data);
+          });
+      };
+      btn.addEventListener("click", sendFetch);
+      const stop = document.getElementById("stop");
+      stop.addEventListener("click", () => {
+        abort.abort();
+        console.log("abort -----");
+      });
+    </script>
+  </body>
+</html>

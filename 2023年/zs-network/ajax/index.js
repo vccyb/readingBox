@@ -46,6 +46,6 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
   });
 });
 
-app.listen(3000, () => {
+app.listen(5500, () => {
   console.log("server is running");
 });
