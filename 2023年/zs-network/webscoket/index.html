@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <ul id="list"></ul>
+      <input type="text" id="input" />
+      <button id="send">send</button>
+
+      <button id="stop">stop</button>
+    </div>
+
+    <script>
+      const ws = new WebSocket("ws://localhost:8080");
+      let list = document.getElementById("list");
+      ws.addEventListener("open", (e) => {
+        console.log("WebSocket连接已打开");
+      });
+
+      ws.addEventListener("message", (e) => {
+        let li = document.createElement("li");
+        let data = JSON.parse(e.data);
+        if (data.type === "message") {
+          li.innerText = data.message;
+          list.appendChild(li);
+        }
+      });
+
+      let input = document.getElementById("input");
+      let sendBtn = document.getElementById("send");
+
+      sendBtn.addEventListener("click", () => {
+        // 发送消息 send
+        if (input.value) {
+          ws.send(input.value);
+        }
+      });
+
+      let stopBtn = document.getElementById("stop");
+      stopBtn.addEventListener("click", () => {
+        ws.close();
+      });
+    </script>
+  </body>
+</html>
