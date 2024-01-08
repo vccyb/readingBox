@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <div><span>账号</span> <input id="name" type="text" /></div>
+      <div><span>密码</span> <input type="password" id="password" /></div>
+    </div>
+    <button id="btn">登陆</button>
+    <script>
+      const btn = document.getElementById("btn");
+      const name = document.getElementById("name");
+      const password = document.getElementById("password");
+
+      btn.onclick = () => {
+        fetch("http://localhost:3000/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: name.value,
+            password: password.value,
+          }),
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            console.log(res);
+          });
+      };
+    </script>
+  </body>
+</html>
