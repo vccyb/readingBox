@@ -1,0 +1,39 @@
+#list {
+}
+/* 1，0，0 */
+
+div {
+}
+/* 0，0，0 */
+.container {
+}
+/* 0，1，0 */
+
+/* ------------------- */
+
+/* 1，1，1 */
+.container #list::before {
+}
+
+/* 1，1，2 */
+.container #list a::before {
+}
+
+/* 0，3，1 */
+.container .form input[type="text"] {
+}
+
+/* 0，2，2 */
+.container ul a:hover {
+}
+
+/* 
+
+[x,y,z]
+
+x:id选择器
+y:类 伪类 属性
+z:元素 伪元素
+
+
+*/
