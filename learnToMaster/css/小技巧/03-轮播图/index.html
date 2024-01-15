@@ -70,6 +70,40 @@
         line-height: 300px;
         font-size: 48px;
       }
+
+      .arrow {
+        color: #fff;
+      }
+
+      .arrow .arrowLeft {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        background-color: rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        font-size: 18px;
+        color: #fff;
+        transform: translateY(-50%);
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: none;
+      }
+
+      .arrow .arrowRight {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        background-color: rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        font-size: 18px;
+        color: #fff;
+        transform: translateY(-50%);
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: none;
+      }
     </style>
   </head>
   <body>
@@ -83,24 +117,46 @@
       <div class="indicator">
         <span class="active"></span><span></span><span></span><span></span>
       </div>
+      <div class="arrow">
+        <button class="arrowLeft"><</button>
+        <button class="arrowRight">></button>
+      </div>
     </div>
 
     <script>
       const doms = {
         carousel: document.querySelector(".carousel"),
         indicators: document.querySelectorAll(".indicator span"),
+        arrowLeft: document.querySelector(".arrowLeft"),
+        arrowRight: document.querySelector(".arrowRight"),
       };
 
+      function init() {
+        let first = doms.carousel.firstElementChild.cloneNode(true);
+        let last = doms.carousel.lastElementChild.cloneNode(true);
+
+        doms.carousel.appendChild(first);
+        doms.carousel.insertBefore(last, doms.carousel.firstElementChild);
+        last.style.position = "absolute";
+        last.style.transform = `translate(-100%)`;
+      }
+
+      init();
       /**
        *
        *
        */
+
+      let currentIndex = 0;
+
       function moveTo(index) {
         doms.carousel.style.transform = `translateX(${-index}00% )`;
+        doms.carousel.style.transition = "transform 0.5s";
         let active = document.querySelector(".indicator .active");
         active.classList.remove("active");
 
         doms.indicators[index].classList.add("active");
+        currentIndex = index;
       }
 
       doms.indicators.forEach((item, index) => {
@@ -108,6 +164,36 @@
           moveTo(index);
         });
       });
+
+      let count = doms.indicators.length;
+      function leftNext() {
+        if (currentIndex === 0) {
+          console.log("无缝");
+          doms.carousel.style.transform = `translateX(-${count}00%)`;
+          doms.carousel.style.transition = "none";
+          //强制渲染
+          doms.carousel.clientHeight;
+          moveTo(count - 1);
+        } else {
+          moveTo(currentIndex - 1);
+        }
+      }
+
+      function rightNext() {
+        if (currentIndex === count - 1) {
+          console.log("无缝");
+          doms.carousel.style.transform = "translateX(100%)";
+          doms.carousel.style.transition = "none";
+          // 强制渲染
+          doms.carousel.clientHeight;
+          moveTo(0);
+        } else {
+          moveTo(currentIndex + 1);
+        }
+      }
+
+      doms.arrowLeft.addEventListener("click", leftNext);
+      doms.arrowRight.addEventListener("click", rightNext);
     </script>
   </body>
 </html>
