@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 默认就是get请求  协议、端口、域名
+      // fetch("http://localhost:3000/info")
+      //   .then((res) => res.json())
+      //   .then((res) => console.log(res));
+
+      // fetch("http://localhost:3000/info", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({ name: "water", age: 18 }),
+      // })
+      //   .then((res) => res.json())
+      //   .then((res) => console.log(res));
+
+      // fetch("http://localhost:3000/info", {
+      //   method: "PATCH",
+      // })
+      //   .then((res) => res.json())
+      //   .then((res) => console.log(res));
+
+      fetch("http://localhost:3000/info")
+        .then((res) => {
+          const headers = res.headers;
+          console.log(headers.get("cyb"));
+          return res.json();
+        })
+        .then((res) => console.log(res));
+    </script>
+  </body>
+</html>
