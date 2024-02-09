@@ -25,4 +25,17 @@ type cases = [
 ];
 
 // ============= Your Code Here =============
-type Includes<T extends readonly any[], U> = U extends T[number] ? true : false;
+
+type myEqual<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B
+  ? 1
+  : 2
+  ? true
+  : false;
+
+type Includes<T extends readonly any[], U> = T extends [infer F, ...infer R]
+  ? myEqual<F, U> extends true
+    ? true
+    : Includes<R, U> //  递归
+  : false;
+
+//  存疑˚
