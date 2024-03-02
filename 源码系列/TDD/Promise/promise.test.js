@@ -101,3 +101,51 @@ it("如果执行失败，应该状态转为REJECTED，执行onRejected方法", (
   expect(onRejected.mock.calls[0][0]).toBe(reason);
   expect(promise.state).toBe("REJECTED");
 });
+
+it("promise的执行应该再队列返回后，而不是立即执行 - resolve", (done) => {
+  const value = ":)";
+  const promise = new APromise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(value);
+    }, 1);
+  });
+  const onFulfilled = jest.fn();
+  promise.then(onFulfilled);
+  setTimeout(() => {
+    expect(onFulfilled.mock.calls.length).toBe(1);
+    expect(onFulfilled.mock.calls[0][0]).toBe(value);
+    promise.then(onFulfilled);
+  }, 5);
+
+  // 并不是立即执行的
+  expect(onFulfilled.mock.calls.length).toBe(0);
+  setTimeout(() => {
+    expect(onFulfilled.mock.calls.length).toBe(2);
+    expect(onFulfilled.mock.calls[1][0]).toBe(value);
+    done();
+  }, 10);
+});
+
+it("promise的执行应该再队列返回后，而不是立即执行 - resolve", (done) => {
+  const reason = "I failed :(";
+  // 1s 后拒绝
+  const promise = new APromise((fulfill, reject) => {
+    setTimeout(reject, 1, reason);
+  });
+  const onRejected = jest.fn();
+  promise.then(null, onRejected);
+  setTimeout(() => {
+    expect(onRejected.mock.calls.length).toBe(1);
+    expect(onRejected.mock.calls[0][0]).toBe(reason);
+    promise.then(null, onRejected);
+  }, 5);
+
+  // 不是立即执行的
+  expect(onRejected.mock.calls.length).toBe(0);
+
+  setTimeout(() => {
+    expect(onRejected.mock.calls.length).toBe(2);
+    expect(onRejected.mock.calls[1][0]).toBe(reason);
+    done();
+  }, 10);
+});
