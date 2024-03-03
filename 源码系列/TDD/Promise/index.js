@@ -1,3 +1,5 @@
+const { coveragePathIgnorePatterns } = require("./jest.config");
+
 // states
 const PENDING = "PENDING";
 const FULFILLED = "FULFILLED";
@@ -11,11 +13,16 @@ class APromise {
   }
 
   then(onFulfilled, onRejected) {
-    handle(this, { onFulfilled, onRejected });
+    const promise = new APromise((resolve, reject) => {});
+    handle(this, { promise, onFulfilled, onRejected });
+    return promise;
   }
 }
 
 function handle(promise, handler) {
+  while (promise.value instanceof APromise) {
+    promise = promise.value;
+  }
   // PENDING状态存储操作，只有在状态改变的时候，才会去执行onFulfilled 和 onRejected
   if (promise.state === PENDING) {
     promise.queue.push(handler);
@@ -71,7 +78,12 @@ function finale(promise) {
 function handleResolved(promise, handler) {
   const cb =
     promise.state === "FULFILLED" ? handler.onFulfilled : handler.onRejected;
-  cb(promise.value);
+  try {
+    const value = cb(promise.value);
+    fulfill(handler.promise, value);
+  } catch (err) {
+    reject(handler.promise, err);
+  }
 }
 
 module.exports = APromise;

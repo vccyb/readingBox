@@ -1,5 +1,4 @@
 const APromise = require("./index");
-const { resolver } = require("./jest.config");
 
 it("构造函数接收一个executor，并且他立即调用一次", () => {
   // mock function with spies
@@ -146,6 +145,86 @@ it("promise的执行应该再队列返回后，而不是立即执行 - resolve",
   setTimeout(() => {
     expect(onRejected.mock.calls.length).toBe(2);
     expect(onRejected.mock.calls[1][0]).toBe(reason);
+    done();
+  }, 10);
+});
+
+it("连续promise,promise的.then返回一个新的promise", () => {
+  expect(() => {
+    const qOnFulfilled = jest.fn();
+    const rOnFulfilled = jest.fn();
+    const p = new APromise((resolve, reject) => resolve());
+    const q = p.then(qOnFulfilled);
+    const r = q.then(rOnFulfilled);
+  }).not.toThrow();
+});
+
+it("如果.then返回的promise，onFulfilled正常处理，状态会转到FULFILLED", () => {
+  const value = ":)";
+  const f1 = jest.fn();
+  new APromise((resolve) => resolve()).then(() => value).then(f1);
+  expect(f1.mock.calls.length).toBe(1);
+  expect(f1.mock.calls[0][0]).toBe(value);
+});
+
+it("如果.then返回的promise，onRejected正常处理，状态会转到FULFILLED", () => {
+  const value = ":)";
+  const f1 = jest.fn();
+  new APromise((resolve, reject) => reject()).then(null, () => value).then(f1);
+  expect(f1.mock.calls.length).toBe(1);
+  expect(f1.mock.calls[0][0]).toBe(value);
+});
+
+it("如果.then返回的promise，在onFulfilled有异常，状态会转到REJECTED", () => {
+  const reason = new Error("I failed :(");
+  const f1 = jest.fn();
+  new APromise((resolve, reject) => resolve())
+    .then(() => {
+      throw reason;
+    })
+    .then(null, f1);
+  expect(f1.mock.calls.length).toBe(1);
+  expect(f1.mock.calls[0][0]).toBe(reason);
+});
+
+it("如果.then返回的promise，在onRejected有异常，状态会转到REJECTED", () => {
+  const reason = new Error("I failed :(");
+  const f1 = jest.fn();
+  new APromise((resolve, reject) => reject())
+    .then(null, () => {
+      throw reason;
+    })
+    .then(null, f1);
+
+  expect(f1.mock.calls.length).toBe(1);
+  expect(f1.mock.calls[0][0]).toBe(reason);
+});
+
+it("如果返回的是promise，就应该采用该promise", () => {
+  const value = ":)";
+  const f1 = jest.fn();
+  new APromise((resolve) => resolve())
+    .then(() => {
+      return new APromise((resolve) => resolve(value));
+    })
+    .then(f1);
+
+  expect(f1.mock.calls.length).toBe(1);
+  expect(f1.mock.calls[0][0]).toBe(value);
+});
+
+it("异步返回的promise，也是一样采用返回的promise", (done) => {
+  const value = ":)";
+  const f1 = jest.fn();
+  new APromise((resolve) => setTimeout(resolve, 0))
+    .then(() => {
+      return new APromise((resolve) => setTimeout(resolve, 0, value));
+    })
+    .then(f1);
+
+  setTimeout(() => {
+    expect(f1.mock.calls.length).toBe(1);
+    expect(f1.mock.calls[0][0]).toBe(value);
     done();
   }, 10);
 });
