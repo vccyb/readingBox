@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "BiliBili换一换缓存助手",
+  "version": "0.1.0",
+  "description": "B站换一换缓存助手,用于缓冲换一换的视频内容，避免点击换一换后又后悔了",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["activeTab"]
+}

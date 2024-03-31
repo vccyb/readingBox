@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .btn {
+        width: 100px;
+        height: 30px;
+        background-color: blueviolet;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+        cursor: pointer;
+        position: relative;
+      }
+      .btn:active {
+        scale: 0.9;
+      }
+
+      .content {
+        box-sizing: border-box;
+        overflow: hidden;
+        position: absolute;
+        margin-top: 10px;
+        top: 100%;
+        left: 0;
+        width: 200px;
+        border-radius: 5px;
+        background-color: blueviolet;
+        color: #fff;
+        line-height: 1.5;
+      }
+
+      .content {
+        padding: 5px;
+        height: 0;
+        transition: 0.5s;
+      }
+
+      .btn:hover .content {
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="btn">
+      hover me
+      <div class="detail">
+        <div class="content">
+          <div class="inner">
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorum
+            quasi cupiditate perspiciatis commodi doloremque assumenda at minus
+            nihil laudantium, sint explicabo sunt numquam magni ducimus aliquid
+            voluptatibus autem deleniti quos? Lorem ipsum, dolor sit amet
+            consectetur adipisicing elit. Dolorum quasi cupiditate perspiciatis
+            commodi doloremque assumenda at minus nihil laudantium, sint
+            explicabo sunt numquam magni ducimus aliquid voluptatibus autem
+            deleniti quos?
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

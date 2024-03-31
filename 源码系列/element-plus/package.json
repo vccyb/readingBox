@@ -1,0 +1,28 @@
+{
+  "name": "element-plus",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm -C play dev",
+    "typecheck": "pnpm run typecheck:web && pnpm run typecheck:play && pnpm run typecheck:node && pnpm run typecheck:vitest",
+    "typecheck:node": "tsc -p tsconfig.node.json --noEmit",
+    "typecheck:web": "vue-tsc -p tsconfig.web.json --composite false --noEmit",
+    "typecheck:play": "vue-tsc -p tsconfig.play.json --composite false --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@cyb-ui/components": "workspace:^",
+    "@cyb-ui/theme-chalk": "workspace:^",
+    "@cyb-ui/utils": "workspace:^",
+    "vue-tsc": "^1.8.27"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.25",
+    "typescript": "^5.4.2",
+    "vue": "^3.4.21"
+  }
+}
