@@ -6,5 +6,15 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["activeTab"]
+  "action": {
+    "default_popup": "popup.html",
+    "default_popup": "popup.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.bilibili.com/*"],
+      "js": ["content-script.js"]
+    }
+  ],
+  "permissions": ["scripting", "activeTab"]
 }
