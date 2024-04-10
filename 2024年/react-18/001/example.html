@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      function MyText() {
+        let name = "react";
+        let home = <a>222</a>;
+        let a = { a: 1 };
+        const fun1 = () => {
+          console.log("fun1");
+        };
+        return (
+          <h2 onClick={() => fun1()}>
+            这是我的第一个组件 {home} {name.toUpperCase()}
+            {false}
+          </h2>
+        );
+      }
+
+      function MyList() {
+        let arr = ["a", "b", "c", 1, 2, 3];
+        return (
+          <div>
+            {arr}{" "}
+            {arr.map((item) => (
+              <h2 key={item}>{item}</h2>
+            ))}
+          </div>
+        );
+      }
+      function MyCondition() {
+        let flag = true;
+        return <h2> {flag ? "aaa" : "bbb"}</h2>;
+      }
+      function MyApp() {
+        let x = 100;
+        const [count, setCount] = React.useState(0);
+        const handleClick = () => {
+          setCount((count) => {
+            x += 1;
+            count += 1;
+            console.log(`count ${count}, x ${x}`);
+            return count;
+          });
+        };
+        return <h1 onClick={handleClick}>Hello, CYB! {count}</h1>;
+      }
+
+      const container = document.getElementById("root");
+      const root = ReactDOM.createRoot(container);
+      root.render(<MyApp />);
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      Read this page for starting a new React project with JSX:
+      https://react.dev/learn/start-a-new-react-project
+
+      Read this page for adding React with JSX to an existing project:
+      https://react.dev/learn/add-react-to-an-existing-project
+    -->
+  </body>
+</html>
