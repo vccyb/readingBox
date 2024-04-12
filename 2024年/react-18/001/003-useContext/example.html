@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, createContext, useContext } = React;
+
+      // 1. 创建一个环境对象
+      const MyContext = createContext();
+
+      function Child() {
+        const { count, setCount } = useContext(MyContext);
+        return (
+          <>
+            <h3>子组件 - {count}</h3>
+            <button onClick={() => setCount(count + 1)}>+1</button>
+          </>
+        );
+      }
+      function Parent() {
+        const { count } = useContext(MyContext);
+        return (
+          <>
+            <h2>父组件 - {count}</h2>
+            <Child />
+          </>
+        );
+      }
+
+      function MyApp() {
+        const [count, setCount] = React.useState(0);
+        return (
+          <>
+            {/* 2. 配置环境对象，并传递值 */}
+            <MyContext.Provider value={{ count, setCount }}>
+              <h1>根组件 - {count}</h1>
+              <Parent />
+            </MyContext.Provider>
+          </>
+        );
+      }
+
+      const container = document.getElementById("root");
+      const root = ReactDOM.createRoot(container);
+      root.render(<MyApp />);
+    </script>
+  </body>
+</html>
