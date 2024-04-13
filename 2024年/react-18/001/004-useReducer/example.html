@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, createContext, useContext, useReducer } = React;
+      /**
+       * state: 操作之前的，原来的值
+       * action = {type, payload}
+       *
+       * 返回值：
+       * 新的state
+       *
+       * 函数式更新：
+       * setCount(prevCount => prevCount + 1)
+       * */
+      function useCount() {
+        function reducer(state, action) {
+          switch (action.type) {
+            case "increment":
+              return { ...state, age: state.age + action.payload };
+            case "decrement":
+              return { ...state, age: state.age - action.payload };
+            case "rename":
+              return { ...state, name: action.payload };
+            default:
+              return state;
+          }
+        }
+        return useReducer(reducer, { name: "张三", age: 18 });
+      }
+      function MyApp() {
+        const [user, dispatch] = useCount();
+        // const [count, setCount] = useState(0);
+        return (
+          <>
+            <h1>user.name: {user.name}</h1>
+            <h1>user.age: {user.age}</h1>
+            <button onClick={() => dispatch({ type: "increment", payload: 1 })}>
+              Increment
+            </button>
+            <button onClick={() => dispatch({ type: "decrement", payload: 1 })}>
+              Decrement
+            </button>
+            <button
+              onClick={() => dispatch({ type: "rename", payload: "李四" })}
+            >
+              rename
+            </button>
+          </>
+        );
+      }
+
+      const container = document.getElementById("root");
+      const root = ReactDOM.createRoot(container);
+      root.render(<MyApp />);
+    </script>
+  </body>
+</html>
