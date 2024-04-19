@@ -1,0 +1,97 @@
+* {
+  font-size: 2vmin;
+  margin: 0;
+  padding: 0;
+}
+div {
+  user-select: none;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  background-color: #000;
+}
+
+.container {
+  position: absolute;
+  width: 45rem;
+  height: 25rem;
+  margin-bottom: 1rem;
+}
+
+.poker,
+.poker_top {
+  position: absolute;
+  width: 20rem;
+  height: 26rem;
+  border: 0.15px solid #fff;
+  border-radius: 1.5rem;
+  background-color: #17f700;
+  transform-origin: bottom left;
+  overflow: hidden;
+}
+.poker_top {
+  background-color: #fff;
+  transition: 0.3s ease;
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.poker_top div {
+  display: flex;
+}
+
+.poker_top div p {
+  font-family: eng;
+  font-size: 3rem;
+  color: #171717;
+  transform: scaleY(0.8);
+  font-weight: bold;
+}
+
+.poker_top div svg {
+  width: 7rem;
+  transition: all 1 ease;
+  fill: #17f700;
+}
+
+.poker_top p {
+  font-family: eng;
+  font-size: 6rem;
+  color: #171717;
+  line-height: 6rem;
+  letter-spacing: 0.6rem;
+  font-weight: bold;
+}
+.poker1 {
+  transform: rotate(-10deg);
+}
+
+.poker2 {
+  transform: rotate(-6deg) translate(35%, -12%);
+}
+
+.poker3 {
+  transform: rotate(-2deg) translate(65%, -19%);
+}
+
+.poker4 {
+  transform: rotate(2deg) translate(95%, -26%);
+}
+
+.poker5 {
+  transform: rotate(6deg) translate(125%, -23%);
+}
+
+.poker img {
+  position: relative;
+  width: 100%;
+}
