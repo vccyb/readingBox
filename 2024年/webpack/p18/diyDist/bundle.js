@@ -77,7 +77,7 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "diyDist/";
+/******/ 	__webpack_require__.p = "";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
@@ -585,7 +585,10 @@ __webpack_require__.r(__webpack_exports__);
 /* 8 */
 /***/ (function(module, exports) {
 
-throw new Error("Module build failed (from ./node_modules/.pnpm/html-loader@1.3.2_webpack@4.47.0/node_modules/html-loader/dist/cjs.js):\nValidationError: Invalid options object. HTML Loader has been initialized using an options object that does not match the API schema.\n - options has an unknown property 'attrs'. These properties are valid:\n   object { preprocessor?, attributes?, minimize?, esModule? }\n    at validate (/Users/chenyubo/readingBox/readingBox/2024年/webpack/p18/node_modules/.pnpm/schema-utils@3.3.0/node_modules/schema-utils/dist/validate.js:191:11)\n    at Object.loader (/Users/chenyubo/readingBox/readingBox/2024年/webpack/p18/node_modules/.pnpm/html-loader@1.3.2_webpack@4.47.0/node_modules/html-loader/dist/index.js:22:29)");
+// Module
+var code = "<footer>\n  <!-- <img src=\"./111.png\" alt=\"\" /> -->\n  <a href=\"111.png\">down</a>\n</footer>\n";
+// Exports
+module.exports = code;
 
 /***/ })
 /******/ ]);
