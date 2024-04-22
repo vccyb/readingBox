@@ -3,6 +3,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { log } = require("console");
 
+const webpack = require("webpack");
 class MyPlugin {
   apply(compiler) {
     console.log("MyPlugin 启动");
@@ -29,6 +30,9 @@ module.exports = {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
     // publicPath: "diyDist/",
+  },
+  devServer: {
+    hot: true,
   },
   module: {
     rules: [
@@ -66,5 +70,9 @@ module.exports = {
       },
     ],
   },
-  plugins: [new CleanWebpackPlugin(), new HtmlWebpackPlugin(), new MyPlugin()],
+  plugins: [
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+  ],
 };
