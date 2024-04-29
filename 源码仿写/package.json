@@ -1,0 +1,19 @@
+{
+  "name": "源码仿写",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.24.4",
+    "@babel/preset-env": "^7.24.4",
+    "jest": "^29.7.0",
+    "omit.js": "^2.0.2",
+    "typescript": "^5.4.5"
+  }
+}
