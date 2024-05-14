@@ -1,0 +1,51 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+#box1 {
+  height: 300px;
+  width: 300px;
+  background-color: blueviolet;
+}
+#box {
+  height: 100px;
+  width: 100px;
+  background-color: blueviolet;
+}
+
+#box2 {
+  height: 300px;
+  width: 300px;
+  background-color: skyblue;
+}
+
+#nav {
+  background-color: blueviolet;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  padding: 30px 50px;
+}
+
+#part2 {
+  display: flex;
+  gap: 50px;
+}
+
+h1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 80px;
+  white-space: nowrap;
+}

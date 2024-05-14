@@ -9,5 +9,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "better-ajv-errors": "^1.2.0",
+    "pkg-up": "^3.0.0"
+  }
 }
