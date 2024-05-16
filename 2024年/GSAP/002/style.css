@@ -1,0 +1,62 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+#page1 {
+  height: 100%;
+  width: 100%;
+  background-color: lightblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#page2 {
+  height: 100%;
+  width: 100%;
+  background-color: rgb(39, 196, 248);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 50px;
+}
+
+#page3 {
+  height: 100%;
+  width: 100%;
+  background-color: rgb(8, 130, 191);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#box {
+  height: 300px;
+  width: 300px;
+  background-color: crimson;
+}
+
+h1 {
+  font-size: 60px;
+  background-color: blueviolet;
+  color: gainsboro;
+  padding: 2rem 4rem;
+  border-radius: 1rem;
+}
+
+h2 {
+  font-size: 40px;
+  background-color: burlywood;
+  color: aliceblue;
+  padding: 2rem 4rem;
+  border-radius: 1rem;
+}
