@@ -1,0 +1,27 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <div id="app"><span @click="sayName">111</span> {{ message }}</div>
+    <script>
+      debugger;
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          message: "Hello Vue!",
+        },
+        methods: {
+          sayName() {
+            console.log(this.name);
+          },
+        },
+      });
+      console.log(vm.message);
+    </script>
+  </body>
+</html>
