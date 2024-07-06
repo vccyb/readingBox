@@ -1,0 +1,38 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: gilory;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background-color: #111;
+}
+
+#page1,
+#page2,
+#page3,
+#page4 {
+  height: 100vh;
+  width: 100%;
+}
+
+#move {
+  background-color: lawngreen;
+  display: flex;
+  overflow: hidden;
+}
+
+.marque {
+  flex-shrink: 0;
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  transition: translateX(-100%);
+}
