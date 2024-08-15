@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <svg width="400" height="300" viewBox="0 0 400 300">
+      <!-- 普通线条 -->
+      <line x1="10" y1="20" x2="390" y2="20" stroke="black" stroke-width="2" />
+      <text x="10" y="40" font-size="12">普通线条</text>
+
+      <!-- stroke-dasharray 示例 -->
+      <line
+        x1="10"
+        y1="70"
+        x2="390"
+        y2="70"
+        stroke="black"
+        stroke-width="2"
+        stroke-dasharray="20 10"
+      />
+      <text x="10" y="90" font-size="12">stroke-dasharray="20 10"</text>
+
+      <!-- stroke-dashoffset 示例 -->
+      <line
+        x1="10"
+        y1="120"
+        x2="390"
+        y2="120"
+        stroke="black"
+        stroke-width="2"
+        stroke-dasharray="0 32%"
+        stroke-dashoffset="15"
+      />
+      <text x="10" y="140" font-size="12">
+        stroke-dasharray="20 10" stroke-dashoffset="15"
+      </text>
+
+      <!-- 百分比示例 -->
+      <line
+        x1="10"
+        y1="170"
+        x2="390"
+        y2="170"
+        stroke="black"
+        stroke-width="2"
+        stroke-dasharray="32% 0"
+      />
+      <text x="10" y="190" font-size="12">stroke-dasharray="0 32%"</text>
+
+      <!-- 动画示例 -->
+      <line
+        x1="10"
+        y1="220"
+        x2="390"
+        y2="220"
+        stroke="black"
+        stroke-width="2"
+        stroke-dasharray="390"
+        stroke-dashoffset="390"
+      >
+        <animate
+          attributeName="stroke-dashoffset"
+          from="390"
+          to="0"
+          dur="3s"
+          repeatCount="indefinite"
+        />
+      </line>
+      <text x="10" y="240" font-size="12">动画效果</text>
+    </svg>
+
+    <style>
+      svg {
+        background-color: #f0f0f0;
+        margin: 20px;
+      }
+    </style>
+  </body>
+</html>

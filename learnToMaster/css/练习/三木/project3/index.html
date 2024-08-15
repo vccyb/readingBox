@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: rgb(26, 26, 26);
+      }
+
+      .light-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 100px;
+      }
+      .touch-area {
+        width: 100px;
+        height: 50px;
+        border-radius: 16px;
+        background-color: aliceblue;
+        cursor: pointer;
+      }
+
+      .light-effect > div {
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background-color: rgb(255, 255, 255);
+      }
+      .light-effect {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .light-effect > :first-child {
+        position: absolute;
+        z-index: 2;
+        background-color: rgb(56, 56, 56);
+        transition: background-color 0.5s;
+      }
+
+      .light-effect > :last-child {
+        width: 280px;
+        height: 280px;
+        transition: filter 0.7s;
+      }
+
+      .touch-area:hover ~ .light-effect > :first-child {
+        background-color: rgb(255, 255, 255);
+      }
+
+      .touch-area:hover + .light-effect > :last-child {
+        filter: blur(100px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="light-box">
+      <div class="touch-area"></div>
+      <div class="light-effect">
+        <div class="main-light"></div>
+        <div></div>
+      </div>
+    </div>
+  </body>
+</html>
