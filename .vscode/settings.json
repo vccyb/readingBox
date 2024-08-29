@@ -2,5 +2,6 @@
   "liveServer.settings.port": 5501,
   "aide.convertLanguagePairs": {
     "typescript": "c"
-  }
+  },
+  "cSpell.words": ["Nuxt"]
 }
