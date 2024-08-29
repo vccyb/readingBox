@@ -1,9 +1,20 @@
 <script setup>
 import HelloWorld from "./components/HelloWorld.vue";
+import { toRef } from "vue";
+
+import { useStore } from "vuex";
+const store = useStore();
+console.log(store.state.count);
+const count = toRef(store.state, "count");
+
+function increment() {
+  store.commit("increment", { count: 10 });
+}
 </script>
 
 <template>
   <div>
+    <button @click="increment">Add</button> {{ count }}
     <a href="https://vitejs.dev" target="_blank">
       <img src="/vite.svg" class="logo" alt="Vite logo" />
     </a>
