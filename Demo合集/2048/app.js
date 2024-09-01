@@ -1,49 +1,109 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const gridDisplay = document.querySelector(".grid");
-  const scoreDisplay = document.getElementById("score");
-  const resultDisplay = document.getElementById("result");
+/**
+ * 优化代码
+ */
 
-  const width = 4;
+class Game2048 {
+  constructor(gridDisplay, scoreDisplay, width = 4) {
+    this.gridDisplay = gridDisplay;
+    this.scoreDisplay = scoreDisplay;
+    this.width = width;
+    this.squares = [];
+    this.score = 0;
+  }
 
-  const squares = [];
-  let score = 0;
-  // create the playing board
+  init() {
+    this.createBoard();
+    this.generate();
+    this.generate();
+    document.addEventListener("keydown", this.control.bind(this));
+  }
 
-  function createBoard() {
-    for (let i = 0; i < width * width; i++) {
+  createBoard() {
+    // 设置样式
+    this.gridDisplay.style.gridTemplateColumns = `repeat(${this.width}, 1fr)`;
+    this.gridDisplay.style.gridTemplateRows = `repeat(${this.width}, 1fr)`;
+
+    for (let i = 0; i < this.width * this.width; i++) {
       const square = document.createElement("div");
       square.innerHTML = 0;
-      gridDisplay.appendChild(square);
-
-      // 设置样式
-      gridDisplay.style.gridTemplateColumns = `repeat(${width}, 1fr)`;
-      gridDisplay.style.gridTemplateRows = `repeat(${width}, 1fr)`;
       square.classList.add("grid-cell");
-      squares.push(square);
+      this.gridDisplay.appendChild(square);
+      this.squares.push(square);
     }
   }
-  createBoard();
-  generate();
-  generate();
 
-  function generate() {
-    const randomNumber = Math.floor(Math.random() * squares.length);
-    if (squares[randomNumber].innerHTML == 0) {
-      squares[randomNumber].innerHTML = 2;
-    } else {
-      generate();
+  generate() {
+    const emptySquares = this.squares.filter((square) => square.innerHTML == 0);
+    if (emptySquares.length > 0) {
+      const randomSquare =
+        emptySquares[Math.floor(Math.random() * emptySquares.length)];
+      randomSquare.innerHTML = Math.random() < 0.9 ? 2 : 4; // 90% 概率生成 2，10% 概率生成 4
+      this.addColors();
     }
-    addColors();
   }
 
-  function moveRight() {
-    for (let i = 0; i < width * width; i++) {
+  /**
+   * key
+   */
+
+  control(e) {
+    switch (e.key) {
+      case "ArrowLeft":
+        this.keyLeft();
+        break;
+      case "ArrowRight":
+        this.keyRight();
+        break;
+      case "ArrowUp":
+        this.keyUp();
+        break;
+      case "ArrowDown":
+        this.keyDown();
+        break;
+    }
+  }
+
+  keyLeft() {
+    this.moveLeft();
+    this.combineRow();
+    // 保证计算后，左移动
+    this.moveLeft();
+    this.generate();
+  }
+
+  keyRight() {
+    console.log("right");
+    this.moveRight();
+    this.combineRow();
+    // 保证计算后，右移动
+    this.moveRight();
+    this.generate();
+  }
+
+  keyUp() {
+    console.log("up");
+    this.moveup();
+    this.combineCol();
+    this.moveup();
+    this.generate();
+  }
+
+  keyDown() {
+    console.log("down");
+    this.movedown();
+    this.combineCol();
+    this.movedown();
+    this.generate();
+  }
+
+  moveRight() {
+    for (let i = 0; i < this.width * this.width; i++) {
       if (i % 4 === 0) {
         // 拿到每一行
-        let totalOne = squares[i].innerHTML;
-        let totalTwo = squares[i + 1].innerHTML;
-        let totalThree = squares[i + 2].innerHTML;
-        let totalFour = squares[i + 3].innerHTML;
+        let totalOne = this.squares[i].innerHTML;
+        let totalTwo = this.squares[i + 1].innerHTML;
+        let totalThree = this.squares[i + 2].innerHTML;
+        let totalFour = this.squares[i + 3].innerHTML;
         let row = [
           parseInt(totalOne),
           parseInt(totalTwo),
@@ -61,22 +121,22 @@ document.addEventListener("DOMContentLoaded", () => {
         let newRow = zeros.concat(filteredRow);
 
         /** 展示新的 */
-        squares[i].innerHTML = newRow[0];
-        squares[i + 1].innerHTML = newRow[1];
-        squares[i + 2].innerHTML = newRow[2];
-        squares[i + 3].innerHTML = newRow[3];
+        this.squares[i].innerHTML = newRow[0];
+        this.squares[i + 1].innerHTML = newRow[1];
+        this.squares[i + 2].innerHTML = newRow[2];
+        this.squares[i + 3].innerHTML = newRow[3];
       }
     }
   }
 
-  function moveLeft() {
-    for (let i = 0; i < width * width; i++) {
+  moveLeft() {
+    for (let i = 0; i < this.width * this.width; i++) {
       if (i % 4 === 0) {
         // 拿到每一行
-        let totalOne = squares[i].innerHTML;
-        let totalTwo = squares[i + 1].innerHTML;
-        let totalThree = squares[i + 2].innerHTML;
-        let totalFour = squares[i + 3].innerHTML;
+        let totalOne = this.squares[i].innerHTML;
+        let totalTwo = this.squares[i + 1].innerHTML;
+        let totalThree = this.squares[i + 2].innerHTML;
+        let totalFour = this.squares[i + 3].innerHTML;
 
         let row = [
           parseInt(totalOne),
@@ -90,20 +150,20 @@ document.addEventListener("DOMContentLoaded", () => {
         let zeros = Array(missing).fill(0);
         let newRow = filteredRow.concat(zeros);
         /** 展示新的 */
-        squares[i].innerHTML = newRow[0];
-        squares[i + 1].innerHTML = newRow[1];
-        squares[i + 2].innerHTML = newRow[2];
-        squares[i + 3].innerHTML = newRow[3];
+        this.squares[i].innerHTML = newRow[0];
+        this.squares[i + 1].innerHTML = newRow[1];
+        this.squares[i + 2].innerHTML = newRow[2];
+        this.squares[i + 3].innerHTML = newRow[3];
       }
     }
   }
 
-  function moveup() {
-    for (let i = 0; i < width; i++) {
-      let totalOne = squares[i].innerHTML;
-      let totalTwo = squares[i + width].innerHTML;
-      let totalThree = squares[i + width * 2].innerHTML;
-      let totalFour = squares[i + width * 3].innerHTML;
+  moveup() {
+    for (let i = 0; i < this.width; i++) {
+      let totalOne = this.squares[i].innerHTML;
+      let totalTwo = this.squares[i + this.width].innerHTML;
+      let totalThree = this.squares[i + this.width * 2].innerHTML;
+      let totalFour = this.squares[i + this.width * 3].innerHTML;
 
       let column = [
         parseInt(totalOne),
@@ -118,19 +178,19 @@ document.addEventListener("DOMContentLoaded", () => {
       let newColumn = filteredColumn.concat(zeros);
 
       /** 展示新的 */
-      squares[i].innerHTML = newColumn[0];
-      squares[i + width].innerHTML = newColumn[1];
-      squares[i + width * 2].innerHTML = newColumn[2];
-      squares[i + width * 3].innerHTML = newColumn[3];
+      this.squares[i].innerHTML = newColumn[0];
+      this.squares[i + this.width].innerHTML = newColumn[1];
+      this.squares[i + this.width * 2].innerHTML = newColumn[2];
+      this.squares[i + this.width * 3].innerHTML = newColumn[3];
     }
   }
 
-  function movedown() {
-    for (let i = 0; i < width; i++) {
-      let totalOne = squares[i].innerHTML;
-      let totalTwo = squares[i + width].innerHTML;
-      let totalThree = squares[i + width * 2].innerHTML;
-      let totalFour = squares[i + width * 3].innerHTML;
+  movedown() {
+    for (let i = 0; i < this.width; i++) {
+      let totalOne = this.squares[i].innerHTML;
+      let totalTwo = this.squares[i + this.width].innerHTML;
+      let totalThree = this.squares[i + this.width * 2].innerHTML;
+      let totalFour = this.squares[i + this.width * 3].innerHTML;
 
       let column = [
         parseInt(totalOne),
@@ -145,124 +205,72 @@ document.addEventListener("DOMContentLoaded", () => {
       let newColumn = zeros.concat(filteredColumn);
 
       /** 展示新的 */
-      squares[i].innerHTML = newColumn[0];
-      squares[i + width].innerHTML = newColumn[1];
-      squares[i + width * 2].innerHTML = newColumn[2];
-      squares[i + width * 3].innerHTML = newColumn[3];
+      this.squares[i].innerHTML = newColumn[0];
+      this.squares[i + this.width].innerHTML = newColumn[1];
+      this.squares[i + this.width * 2].innerHTML = newColumn[2];
+      this.squares[i + this.width * 3].innerHTML = newColumn[3];
     }
   }
 
-  /**
-   * keys
-   */
-
-  function control(e) {
-    console.log("key control");
-    if (e.key === "ArrowLeft") {
-      keyLeft();
-    } else if (e.key === "ArrowRight") {
-      keyRight();
-    } else if (e.key === "ArrowUp") {
-      keyUp();
-    } else if (e.key === "ArrowDown") {
-      keyDown();
-    }
-  }
-
-  document.addEventListener("keydown", control);
-
-  function keyLeft() {
-    console.log("left");
-    moveLeft();
-    combineRow();
-    // 保证计算后，左移动
-    moveLeft();
-    generate();
-  }
-
-  function keyRight() {
-    console.log("right");
-    moveRight();
-    combineRow();
-    // 保证计算后，右移动
-    moveRight();
-    generate();
-  }
-
-  function keyUp() {
-    console.log("up");
-    moveup();
-    combineCol();
-    moveup();
-    generate();
-  }
-
-  function keyDown() {
-    console.log("down");
-    movedown();
-    combineCol();
-    movedown();
-    generate();
-  }
-
-  /**
-   */
-  function combineRow() {
-    for (let i = 0; i < width * width - 1; i++) {
-      if (squares[i].innerHTML === squares[i + 1].innerHTML) {
-        let cur = parseInt(squares[i].innerHTML);
-        let next = parseInt(squares[i + 1].innerHTML);
+  combineRow() {
+    for (let i = 0; i < this.width * this.width - 1; i++) {
+      if (this.squares[i].innerHTML === this.squares[i + 1].innerHTML) {
+        let cur = parseInt(this.squares[i].innerHTML);
+        let next = parseInt(this.squares[i + 1].innerHTML);
         let combineTotal = cur + next;
-        squares[i].innerHTML = combineTotal;
-        squares[i + 1].innerHTML = 0;
-        score += combineTotal;
-        scoreDisplay.innerHTML = score;
+        this.squares[i].innerHTML = combineTotal;
+        this.squares[i + 1].innerHTML = 0;
+        this.score += combineTotal;
+        this.scoreDisplay.innerHTML = this.score;
       }
     }
-    checkWin();
-    checkLose();
+    this.checkWin();
+    this.checkLose();
   }
 
-  function combineCol() {
-    for (let i = 0; i < width * width - width; i++) {
-      if (squares[i].innerHTML === squares[i + width].innerHTML) {
-        let cur = parseInt(squares[i].innerHTML);
-        let next = parseInt(squares[i + width].innerHTML);
+  combineCol() {
+    for (let i = 0; i < this.width * this.width - this.width; i++) {
+      if (
+        this.squares[i].innerHTML === this.squares[i + this.width].innerHTML
+      ) {
+        let cur = parseInt(this.squares[i].innerHTML);
+        let next = parseInt(this.squares[i + this.width].innerHTML);
         let combineTotal = cur + next;
-        squares[i].innerHTML = combineTotal;
-        squares[i + width].innerHTML = 0;
-        score += combineTotal;
-        scoreDisplay.innerHTML = score;
+        this.squares[i].innerHTML = combineTotal;
+        this.squares[i + this.width].innerHTML = 0;
+        this.score += combineTotal;
+        this.scoreDisplay.innerHTML = this.score;
       }
     }
-    checkWin();
-    checkLose();
+    this.checkWin();
+    this.checkLose();
   }
 
-  function checkWin() {
-    for (let i = 0; i < width * width; i++) {
-      if (squares[i].innerHTML === "2048") {
+  checkWin() {
+    for (let i = 0; i < this.width * this.width; i++) {
+      if (this.squares[i].innerHTML === "2048") {
         // resultDisplay.innerHTML = "You Win!";
-        document.removeEventListener("keyup", control);
+        alert("You Win!");
+        document.removeEventListener("keyup", this.control);
         return true;
       }
     }
   }
 
-  function checkLose() {
+  checkLose() {
     // 检查是否有空格
-    for (let i = 0; i < squares.length; i++) {
-      if (squares[i].innerHTML == "0") {
+    for (let i = 0; i < this.squares.length; i++) {
+      if (this.squares[i].innerHTML == "0") {
         return false; // 还有空格，游戏没有结束
       }
     }
 
     // 检查水平方向是否有相邻的相同数字
-    for (let i = 0; i < width; i++) {
-      for (let j = 0; j < width - 1; j++) {
+    for (let i = 0; i < this.width; i++) {
+      for (let j = 0; j < this.width - 1; j++) {
         if (
-          squares[i * width + j].innerHTML ===
-          squares[i * width + j + 1].innerHTML
+          this.squares[i * this.width + j].innerHTML ===
+          this.squares[i * this.width + j + 1].innerHTML
         ) {
           return false; // 有相邻的相同数字，游戏没有结束
         }
@@ -270,11 +278,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 检查垂直方向是否有相邻的相同数字
-    for (let i = 0; i < width; i++) {
-      for (let j = 0; j < width - 1; j++) {
+    for (let i = 0; i < this.width; i++) {
+      for (let j = 0; j < this.width - 1; j++) {
         if (
-          squares[i + j * width].innerHTML ===
-          squares[i + (j + 1) * width].innerHTML
+          this.squares[i + j * this.width].innerHTML ===
+          this.squares[i + (j + 1) * this.width].innerHTML
         ) {
           return false; // 有相邻的相同数字，游戏没有结束
         }
@@ -283,53 +291,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 如果以上条件都不满足，游戏结束
     // resultDisplay.innerHTML = "You Lose!";
-    document.removeEventListener("keydown", control);
+    alert("You Lose!");
+    document.removeEventListener("keydown", this.control);
     return true;
   }
-  function addColors() {
-    for (let i = 0; i < squares.length; i++) {
-      let value = parseInt(squares[i].innerHTML);
+
+  addColors() {
+    for (let i = 0; i < this.squares.length; i++) {
+      let value = parseInt(this.squares[i].innerHTML);
       switch (value) {
         case 0:
-          squares[i].style.backgroundColor = "#afa192";
-          squares[i].style.color = "#afa192";
+          this.squares[i].style.backgroundColor = "#afa192";
+          this.squares[i].style.color = "#afa192";
           break;
         case 2:
-          squares[i].style.backgroundColor = "#EEE4DA";
-          squares[i].style.color = "#776E65";
+          this.squares[i].style.backgroundColor = "#EEE4DA";
+          this.squares[i].style.color = "#776E65";
           break;
         case 4:
-          squares[i].style.backgroundColor = "#EDE0C8";
-          squares[i].style.color = "#776E65";
+          this.squares[i].style.backgroundColor = "#EDE0C8";
+          this.squares[i].style.color = "#776E65";
           break;
         case 8:
-          squares[i].style.backgroundColor = "#F2B179";
-          squares[i].style.color = "#F9F6F2";
+          this.squares[i].style.backgroundColor = "#F2B179";
+          this.squares[i].style.color = "#F9F6F2";
           break;
         case 16:
-          squares[i].style.backgroundColor = "#F59563";
-          squares[i].style.color = "#F9F6F2";
+          this.squares[i].style.backgroundColor = "#F59563";
+          this.squares[i].style.color = "#F9F6F2";
           break;
         case 32:
-          squares[i].style.backgroundColor = "#F67C5F";
-          squares[i].style.color = "#F9F6F2";
+          this.squares[i].style.backgroundColor = "#F67C5F";
+          this.squares[i].style.color = "#F9F6F2";
           break;
         case 64:
-          squares[i].style.backgroundColor = "#F65E3B";
-          squares[i].style.color = "#F9F6F2";
+          this.squares[i].style.backgroundColor = "#F65E3B";
+          this.squares[i].style.color = "#F9F6F2";
           break;
         case 128:
         case 256:
         case 512:
         case 1024:
         case 2048:
-          squares[i].style.backgroundColor = "#EDCF72";
-          squares[i].style.color = "#F9F6F2";
+          this.squares[i].style.backgroundColor = "#EDCF72";
+          this.squares[i].style.color = "#F9F6F2";
           break;
         default:
-          squares[i].style.backgroundColor = "#CDC1B4";
-          squares[i].style.color = "#776E65";
+          this.squares[i].style.backgroundColor = "#CDC1B4";
+          this.squares[i].style.color = "#776E65";
       }
     }
   }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const gridDisplay = document.querySelector(".grid");
+  const scoreDisplay = document.getElementById("score");
+  let game = new Game2048(gridDisplay, scoreDisplay);
+
+  game.init();
 });
