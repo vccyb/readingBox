@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function performanceCallback(list, observer) {
+        list.getEntries().forEach((entry) => {
+          console.log(entry);
+          console.log(`name    : ${entry.name}`);
+          console.log(`type    : ${entry.entryType}`);
+          console.log(`start   : ${entry.startTime}`);
+          console.log(`duration: ${entry.duration}`);
+        });
+      }
+
+      let observer = new PerformanceObserver(performanceCallback);
+      observer.observe({ entryTypes: ["mark", "measure"] });
+
+      performance.mark("start:task");
+      function runTask() {
+        let sum = 0;
+        for (let i = 0; i < 100000000; i++) {
+          sum += i;
+        }
+      }
+      performance.mark("end:task");
+      performance.measure("task", "start:task", "end:task");
+    </script>
+  </body>
+</html>

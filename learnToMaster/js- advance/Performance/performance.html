@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // const timeStart = performance.now();
+      // runMyCode();
+      // const timeTaken = performance.now() - timeStart;
+
+      // console.log(`runMyCode() executed in ${timeTaken}ms`);
+
+      function runMyCode() {
+        let sum = 0;
+        for (let i = 0; i < 100000000; i++) {
+          // do something
+          sum += i;
+        }
+      }
+
+      performance.mark("start:app");
+      performance.mark("start:runTask");
+
+      runMyCode();
+      performance.mark("end:runTask");
+
+      runMyCode();
+      runMyCode();
+      performance.mark("end:app ");
+
+      console.log(performance.getEntriesByType("mark"));
+
+      /** measure task **/
+      // 新的标记名称， start end
+      performance.measure("task", "start:runTask", "end:runTask");
+
+      // 上面就会存储到缓存中，如果获取这个measure呢
+      // const measure = performance.getEntriesByType("measure");
+      // performance.getEntriesByName('task')
+    </script>
+  </body>
+</html>

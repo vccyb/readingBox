@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>fp and fcp</h1>
+
+    <div>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione quam
+      numquam quaerat est facilis illum laboriosam iusto eius distinctio quidem,
+      ut provident, doloribus consequatur quod illo aut nam esse dolores officia
+      corporis, fugit odit reprehenderit recusandae. Dicta voluptates magnam,
+      corrupti neque et molestiae blanditiis rerum at nisi vitae eveniet
+      laboriosam.
+    </div>
+    <script>
+      function runMyCode() {
+        let sum = 0;
+        for (let i = 0; i < 100000000; i++) {
+          // do something
+          sum += i;
+        }
+      }
+
+      performance.mark("start:app");
+      performance.mark("start:runTask");
+
+      runMyCode();
+      performance.mark("end:runTask");
+
+      // const paintTimes = performance.getEntriesByType('paint');
+    </script>
+  </body>
+</html>

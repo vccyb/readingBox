@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap-grid.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <h1>fp and fcp</h1>
+
+    <div>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione quam
+      numquam quaerat est facilis illum laboriosam iusto eius distinctio quidem,
+      ut provident, doloribus consequatur quod illo aut nam esse dolores officia
+      corporis, fugit odit reprehenderit recusandae. Dicta voluptates magnam,
+      corrupti neque et molestiae blanditiis rerum at nisi vitae eveniet
+      laboriosam.
+    </div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.4.38/vue.cjs.js"></script>
+    <script>
+      function runMyCode() {
+        let sum = 0;
+        for (let i = 0; i < 100000000; i++) {
+          // do something
+          sum += i;
+        }
+      }
+
+      // performance.mark("start:app");
+      // performance.mark("start:runTask");
+
+      runMyCode();
+      // performance.mark("end:runTask");
+
+      fetch("https://jsonplaceholder.typicode.com/todos/1")
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        });
+
+      // axios xmlhttp
+    </script>
+  </body>
+</html>
