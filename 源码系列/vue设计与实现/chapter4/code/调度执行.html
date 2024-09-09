@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="./effect.js"></script>
+    <script src="proxy.js"></script>
+    <script src="./app.js"></script>
+    <script>
+      const data = {
+        foo: 1,
+      };
+      const obj = new Proxy(data, {
+        get(target, key) {
+          track(target, key);
+          return target[key];
+        },
+        set(target, key, newVal) {
+          target[key] = newVal;
+          trigger(target, key);
+        },
+      });
+
+      // effect(
+      //   () => {
+      //     console.log(obj.foo);
+      //   },
+      //   {
+      //     scheduler(fn) {
+      //       setTimeout(fn);
+      //     },
+      //   }
+      // );
+
+      // 定义一个任务的队列
+      const jobQueue = new Set();
+      const p = Promise.resolve();
+
+      // 是否在刷新队列
+      let isFlushing = false;
+
+      function flushJob() {
+        //  如果在刷新，啥也不做
+        if (isFlushing) return;
+        // 设置表示
+        isFlushing = true;
+        p.then(() => {
+          jobQueue.forEach((job) => job());
+        }).finally(() => {
+          isFlushing = false;
+        });
+      }
+
+      effect(
+        () => {
+          console.log(obj.foo);
+        },
+        {
+          scheduler(fn) {
+            jobQueue.add(fn);
+            flushJob();
+          },
+        }
+      );
+
+      obj.foo++;
+      obj.foo++;
+      console.log("结束了");
+
+      // obj.foo  触发 track
+      // 收集副作用函数
+      // trigger
+      // 副作用函数还在执行中！
+      //
+    </script>
+  </body>
+</html>

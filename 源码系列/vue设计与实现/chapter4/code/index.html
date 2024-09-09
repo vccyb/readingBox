@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="./effect.js"></script>
+    <script src="./app.js"></script>
+    <script>
+      const bucket = new WeakMap();
+
+      const data = {
+        text: "hello world",
+      };
+      const obj = new Proxy(data, {
+        get(target, key) {
+          if (!activeEffect) return target[key];
+
+          // 添加依赖
+          let depsMap = bucket.get(target);
+          if (!depsMap) {
+            bucket.set(target, new Map());
+          }
+
+          let deps = depsMap.get(key);
+          if (!deps) {
+            depsMap.set(key, new Set());
+          }
+          //添加依赖
+          deps.add(activeEffect);
+
+          return target[key];
+        },
+        set(target, key, newVal) {
+          target[key] = newVal;
+          const depsMap = bucket.get(target);
+          if (!depsMap) return;
+          const effects = depsMap.get(key);
+          if (effects) {
+            effects.forEach((fn) => fn());
+          }
+        },
+      });
+
+      effect(() => {
+        console.log("effect run");
+        document.body.innerHTML = obj.text;
+      });
+
+      setTimeout(() => {
+        obj.gogogo = "hello vue";
+      }, 2000);
+    </script>
+  </body>
+</html>

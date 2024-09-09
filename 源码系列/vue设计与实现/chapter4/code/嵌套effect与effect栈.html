@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="./effect.js"></script>
+    <script src="proxy.js"></script>
+    <script src="./app.js"></script>
+
+    <script>
+      const data = {
+        foo: true,
+        bar: true,
+      };
+
+      const obj = new Proxy(data, {
+        get(target, key) {
+          track(target, key);
+          return target[key];
+        },
+        set(target, key, value) {
+          trigger(target, key);
+          target[key] = value;
+          return true;
+        },
+      });
+
+      let temp1, temp2;
+
+      effect(function effectFn1() {
+        console.log("effectFn1 执行");
+
+        effect(function effectFn2() {
+          console.log("effectFn2 执行");
+          temp2 = obj.bar;
+        });
+
+        temp1 = obj.foo;
+      });
+
+      setTimeout(() => {
+        obj.bar = "false";
+      }, 200);
+    </script>
+  </body>
+</html>

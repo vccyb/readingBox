@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="./effect.js"></script>
+    <script src="proxy.js"></script>
+    <script src="./app.js"></script>
+    <script>
+      const data = {
+        foo: 1,
+        bar: 10,
+      };
+      const obj = new Proxy(data, {
+        get(target, key) {
+          track(target, key);
+          return target[key];
+        },
+        set(target, key, newVal) {
+          target[key] = newVal;
+          trigger(target, key);
+        },
+      });
+
+      // const effectFn = effect(
+      //   () => {
+      //     console.log(obj.foo);
+      //   },
+      //   {
+      //     lazy: true,
+      //   }
+      // );
+      // effectFn();
+
+      // obj.foo = 2;
+
+      // const effectFn = effect(
+      //   () => {
+      //     return obj.foo + obj.bar;
+      //   },
+      //   {
+      //     lazy: true,
+      //   }
+      // );
+
+      // const value = effectFn();
+      // console.log(value);
+
+      const sumRes = computed(() => {
+        return obj.foo + obj.bar;
+      });
+
+      console.log(sumRes);
+      console.log(sumRes.value);
+      console.log(sumRes.value);
+
+      obj.foo = 999;
+      console.log(sumRes.value);
+    </script>
+  </body>
+</html>

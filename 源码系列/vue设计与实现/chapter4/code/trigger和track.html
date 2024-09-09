@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="./effect.js"></script>
+    <script src="./app.js"></script>
+    <script>
+      const bucket = new WeakMap();
+
+      const data = {
+        text: "hello world",
+      };
+      const obj = new Proxy(data, {
+        get(target, key) {
+          track(target, key);
+          return target[key];
+        },
+        set(target, key, newVal) {
+          target[key] = newVal;
+          trigger(target, key);
+        },
+      });
+
+      function track(target, key) {
+        if (!activeEffect) return;
+        let depsMap = bucket.get(target);
+        if (!depsMap) {
+          depsMap = new Map();
+          bucket.set(target, depsMap);
+        }
+
+        let deps = depsMap.get(key);
+        if (!deps) {
+          deps = new Set();
+          depsMap.set(key, deps);
+        }
+        deps.add(activeEffect);
+      }
+
+      function trigger(target, key) {
+        const depsMap = bucket.get(target);
+        if (!depsMap) return;
+        const effects = depsMap.get(key);
+        if (effects) {
+          effects.forEach((fn) => fn());
+        }
+      }
+
+      effect(() => {
+        console.log("effect run");
+        document.body.innerHTML = obj.text;
+      });
+
+      setTimeout(() => {
+        obj.gogogo = "hello vue";
+      }, 2000);
+    </script>
+  </body>
+</html>

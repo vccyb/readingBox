@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <iframe
+      src="//player.bilibili.com/player.html?isOutside=true&aid=113101319963217&bvid=BV1uVpvehEBq&cid=25787370571&p=1"
+      scrolling="no"
+      border="0"
+      frameborder="no"
+      framespacing="0"
+      allowfullscreen="true"
+      width="100%"
+      id="myIframe"
+    ></iframe>
+  </body>
+
+  <script>
+    function iFrameResize(selector) {
+      const iframe = document.querySelector(selector);
+
+      // 监听iframe的消息
+      window.addEventListener("message", (event) => {
+        console.log(event.data);
+        const { height, width } = event.data;
+        iframe.style.height = height + "px";
+        iframe.style.width = width + "px";
+      });
+
+      // 发送初始化消息给iframe
+      iframe.contentWindow.postMessage(
+        {
+          type: "init",
+        },
+        "*"
+      );
+    }
+
+    iFrameResize("#myIframe");
+  </script>
+</html>

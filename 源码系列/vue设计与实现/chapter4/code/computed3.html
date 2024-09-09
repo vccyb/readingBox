@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="./effect.js"></script>
+    <script src="proxy.js"></script>
+    <script src="./app.js"></script>
+    <script>
+      const data = {
+        foo: 1,
+        bar: 10,
+      };
+      const obj = new Proxy(data, {
+        get(target, key) {
+          track(target, key);
+          return target[key];
+        },
+        set(target, key, newVal) {
+          target[key] = newVal;
+          trigger(target, key);
+        },
+      });
+
+      const sumRes = computed(() => {
+        return obj.foo + obj.bar;
+      });
+
+      effect(() => {
+        console.log("sumRes: ", sumRes.value);
+      });
+
+      watch(
+        () => obj.foo,
+        (newVal, oldVal) => {
+          console.log("foo changed: ", newVal, oldVal);
+        }
+      );
+
+      obj.foo++;
+    </script>
+  </body>
+</html>

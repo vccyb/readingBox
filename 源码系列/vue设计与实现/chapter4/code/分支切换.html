@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="./effect.js"></script>
+    <script src="proxy.js"></script>
+    <script src="./app.js"></script>
+    <script>
+      const data = {
+        ok: "true",
+        text: "hello world",
+      };
+      const obj = new Proxy(data, {
+        get(target, key) {
+          track(target, key);
+          return target[key];
+        },
+        set(target, key, newVal) {
+          target[key] = newVal;
+          trigger(target, key);
+        },
+      });
+
+      effect(() => {
+        console.log("effect run");
+        document.body.innerHTML = obj.ok ? obj.text : "not";
+      });
+
+      setTimeout(() => {
+        // 问题就是这里会又进行收集
+        obj.ok = false;
+      }, 500);
+
+      setTimeout(() => {
+        console.log("不会在触发了");
+        obj.text = "again"; // 触发
+      }, 2000);
+    </script>
+  </body>
+</html>
